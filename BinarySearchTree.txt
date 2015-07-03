@@ -1,0 +1,188 @@
+public class Node {
+
+        int number;
+        String name;
+
+        Node leftChild;
+        Node rightChild;
+
+        Node(int number, String name){
+
+            this.number = number;
+            this.name = name;
+
+        }
+
+        public String toString(){
+
+            return name + " has a key " + number;
+
+        }
+    }
+
+public class BinarySearchTree {
+
+    Node root;
+
+    public void addNode(int number, String name) {
+        Node newNode = new Node(number, name);
+        if (root == null) {
+            root = newNode;
+        } else {
+            Node mainNode = root;
+            Node parent;
+            while (true) {
+                parent = mainNode;
+                if (number < mainNode.number) {
+                    mainNode = mainNode.leftChild;
+                    if (mainNode == null) {
+                        parent.leftChild = newNode;
+                        return;
+                    }
+                } else {
+                    mainNode = mainNode.rightChild;
+                    if (mainNode == null) {
+                        parent.rightChild = newNode;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    public void traverse(Node mainNode) {
+        if (mainNode != null) {
+            //System.out.println(mainNode); preorder
+            traverse(mainNode.leftChild);
+            System.out.println(mainNode);
+            traverse(mainNode.rightChild);
+            //System.out.println(mainNode); postorder
+        }
+    }
+
+    public Node findNode(int number) {
+        Node mainNode = root;
+        while (mainNode.number != number) {
+            if (number < mainNode.number)
+                mainNode = mainNode.leftChild;
+            else
+                mainNode = mainNode.rightChild;
+            if (mainNode == null)
+                return null;
+        }
+
+        return mainNode;
+    }
+
+    public boolean remove(int number) {
+        Node mainNode = root;
+        Node parent = root;
+        boolean ifItsALeftChild = true;
+        while (mainNode.number != number) {
+            parent = mainNode;
+            if (number < mainNode.number) {
+                ifItsALeftChild = true;
+                mainNode = mainNode.leftChild;
+            } else {
+                ifItsALeftChild = false;
+                mainNode = mainNode.rightChild;
+            }
+            if (mainNode == null)
+                return false;
+        }
+        if (mainNode.leftChild == null && mainNode.rightChild == null) {
+            if (mainNode == root) {
+                root = null;
+            } else if (ifItsALeftChild)
+                parent.leftChild = null;
+            else
+                parent.rightChild = null;
+        } else if (mainNode.rightChild == null) {
+            if (mainNode == root)
+                root = mainNode.leftChild;
+            else
+            if (ifItsALeftChild)
+                parent.leftChild = mainNode.leftChild;
+            else parent.rightChild = mainNode.leftChild;
+        } else
+        if (mainNode.leftChild == null) {
+            if (mainNode == root)
+                root = mainNode.rightChild;
+            else
+            if (ifItsALeftChild)
+                parent.leftChild = mainNode.rightChild;
+            else parent.rightChild = mainNode.leftChild;
+        } else {
+            Node replacement = getReplacementNode(mainNode);
+            if (mainNode == root)
+                root = replacement;
+            else
+            if (ifItsALeftChild)
+                parent.leftChild = replacement;
+            else
+                parent.rightChild = replacement;
+            replacement.leftChild = mainNode.leftChild;
+        }
+        return true;
+    }
+
+    public int findMax(){
+        Node rightNode = root;
+        while(true) {
+            if (rightNode.rightChild == null)
+                return rightNode.number;
+            else
+                rightNode = rightNode.rightChild;
+        }
+    }
+
+    public int findMin(){
+        Node leftNode = root;
+        while (true){
+            if(leftNode.leftChild == null)
+                return leftNode.number;
+            else
+                leftNode = leftNode.leftChild;
+        }
+    }
+
+    public Node getReplacementNode(Node replacedNode) {
+
+        Node replacementParent = replacedNode;
+        Node replacement = replacedNode;
+        Node mainNode = replacedNode.rightChild;
+        while (mainNode != null) {
+            replacementParent = replacement;
+            replacement = mainNode;
+            mainNode = mainNode.leftChild;
+        }
+        if (replacement != replacedNode.rightChild) {
+            replacementParent.leftChild = replacement.rightChild;
+            replacement.rightChild = replacedNode.rightChild;
+        }
+        return replacement;
+    }
+
+    public static void main(String[] args) {
+        BinarySearchTree theTree = new BinarySearchTree();
+
+        theTree.addNode(50, "Root");
+        theTree.addNode(25, "Name1");
+        theTree.addNode(15, "Name2");
+        theTree.addNode(2, "Name3");
+        theTree.addNode(18, "Name4");
+        theTree.addNode(30, "Name5");
+        theTree.addNode(75, "Name6");
+        theTree.addNode(70, "Name7");
+        theTree.addNode(85, "Name8");
+
+        System.out.println("Node with the Number 75");
+        System.out.println(theTree.findNode(75));
+        System.out.println("Remove Number 25");
+        theTree.remove(25);
+        System.out.println(theTree.findNode(25));
+        theTree.traverse(theTree.root);
+        System.out.println(theTree.findMax());
+        System.out.println(theTree.findMin());
+    }
+}
