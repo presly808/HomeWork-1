@@ -1,6 +1,6 @@
-public class Node {
+public class Node { // that class can be nested in BinarySearchTree
 
-        int number;
+        int number; // you node can cantoins ony integer as a value, replace by generic or object
         String name;
 
         Node leftChild;
@@ -22,7 +22,7 @@ public class Node {
 
 public class BinarySearchTree {
 
-    Node root;
+    Node root; // not a private
 
     public void addNode(int number, String name) {
         Node newNode = new Node(number, name);
@@ -60,6 +60,7 @@ public class BinarySearchTree {
         }
     }
 
+    // 
     public Node findNode(int number) {
         Node mainNode = root;
         while (mainNode.number != number) {
@@ -81,7 +82,7 @@ public class BinarySearchTree {
         while (mainNode.number != number) {
             parent = mainNode;
             if (number < mainNode.number) {
-                ifItsALeftChild = true;
+                ifItsALeftChild = true; // simplify var name, ex "isLeftChild"
                 mainNode = mainNode.leftChild;
             } else {
                 ifItsALeftChild = false;
@@ -126,6 +127,7 @@ public class BinarySearchTree {
         return true;
     }
 
+    // return node, not value
     public int findMax(){
         Node rightNode = root;
         while(true) {
@@ -136,6 +138,7 @@ public class BinarySearchTree {
         }
     }
 
+    // see above comment
     public int findMin(){
         Node leftNode = root;
         while (true){
